@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace LianLianKan
 {
-    public record GameRestorePack : IGameRestore
+    public record GameRestorePack
     {
         public GameRestorePack(LLKTokenType[,] tokenTypes, int tokenAmount, int skillPoint)
         {

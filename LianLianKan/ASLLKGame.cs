@@ -31,14 +31,14 @@ namespace LianLianKan
             OnPropertyChanged(nameof(SkillPoint));
         }
 
-        public void RestoreGame(IGameRestore restorePack)
+        public void RestoreGame(GameRestorePack restorePack)
         {
             base.RestoreGame(restorePack.TokenTypes, restorePack.TokenAmount);
             SkillPoint = restorePack.SkillPoint;
             OnPropertyChanged(nameof(SkillPoint));
         }
 
-        public async Task RestoreGameAsync(IGameRestore restorePack)
+        public async Task RestoreGameAsync(GameRestorePack restorePack)
         {
             await base.RestoreGameAsync(restorePack.TokenTypes, restorePack.TokenAmount);
             SkillPoint = restorePack.SkillPoint;
