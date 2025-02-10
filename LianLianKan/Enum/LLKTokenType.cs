@@ -1,5 +1,7 @@
-﻿namespace LianLianKan {
-    public enum LLKTokenType {
+﻿namespace LianLianKan
+{
+    public enum LLKTokenType
+    {
         None,
         AS,
         A1,

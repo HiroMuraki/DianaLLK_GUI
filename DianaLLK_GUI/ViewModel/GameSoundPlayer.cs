@@ -4,11 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media;
 
-namespace DianaLLK_GUI.ViewModel {
-    public class GameSoundPlayer {
+namespace DianaLLK_GUI.ViewModel
+{
+    public class GameSoundPlayer
+    {
         private static GameSoundPlayer _singletonObject;
         private static object _singletonLocker = new object();
-        private string _gameSoundDirectory;
         private readonly Random _rnd;
         private readonly List<Uri> _clickFXSounds; // 点击音效
         private readonly List<Uri> _matchedFXSounds; // 连接成功音效
@@ -25,17 +26,12 @@ namespace DianaLLK_GUI.ViewModel {
         private readonly MediaPlayer _gameCompletedSoundPlayer; // 结算音播放器
         private readonly MediaPlayer _skillActivedSoundPlayer; // 技能启动音播放器
 
-        public string GameSoundDirectory {
-            get {
-                return _gameSoundDirectory;
-            }
-            set {
-                _gameSoundDirectory = value;
-            }
-        }
-        private GameSoundPlayer() {
+        public string GameSoundDirectory { get; set; }
+
+        private GameSoundPlayer()
+        {
             _rnd = new Random();
-            _gameSoundDirectory = "ASSounds";
+            GameSoundDirectory = "ASSounds";
 
             _clickSoundPlayer = new MediaPlayer();
             _matchedSoundPlayer = new MediaPlayer();
@@ -54,72 +50,98 @@ namespace DianaLLK_GUI.ViewModel {
             _eileenSkillSounds = new List<Uri>();
             _gameMusic = new List<Uri>();
         }
-        public static GameSoundPlayer GetInstance() {
-            if (_singletonObject == null) {
-                lock (_singletonLocker) {
-                    if (_singletonObject == null) {
-                        _singletonObject = new GameSoundPlayer();
-                    }
+
+        public static GameSoundPlayer GetInstance()
+        {
+            if (_singletonObject == null)
+            {
+                lock (_singletonLocker)
+                {
+                    _singletonObject ??= new GameSoundPlayer();
                 }
             }
             return _singletonObject;
         }
 
-        public void LoadSounds() {
-            if (!Directory.Exists(_gameSoundDirectory)) {
+        public void LoadSounds()
+        {
+            if (!Directory.Exists(GameSoundDirectory))
+            {
                 return;
             }
-            foreach (var file in Directory.GetFiles(_gameSoundDirectory)) {
+            foreach (var file in Directory.GetFiles(GameSoundDirectory))
+            {
                 string fileName = Path.GetFileName(file).ToUpper();
-                Uri soundUri = new Uri($@"{_gameSoundDirectory}\{fileName}", UriKind.Relative);
+                Uri soundUri = new Uri($@"{GameSoundDirectory}\{fileName}", UriKind.Relative);
                 // 跳过非MP3
-                if (!(Path.GetExtension(fileName) == ".MP3")) {
+                if (!(Path.GetExtension(fileName) == ".MP3"))
+                {
                     continue;
                 }
                 //
-                if (fileName.StartsWith("CLICK")) {
+                if (fileName.StartsWith("CLICK"))
+                {
                     _clickFXSounds.Add(soundUri);
                 }
-                else if (fileName.StartsWith("COMPLETED")) {
+                else if (fileName.StartsWith("COMPLETED"))
+                {
                     _gameCompletedSounds.Add(soundUri);
                 }
-                else if (fileName.StartsWith("MUSIC")) {
+                else if (fileName.StartsWith("MUSIC"))
+                {
                     _gameMusic.Add(soundUri);
                 }
-                else if (fileName.StartsWith("MATCHED")) {
+                else if (fileName.StartsWith("MATCHED"))
+                {
                     _matchedFXSounds.Add(soundUri);
                 }
-                else if (fileName.StartsWith("#AVA")) {
+                else if (fileName.StartsWith("#AVA"))
+                {
                     _avaSkillSounds.Add(soundUri);
                 }
-                else if (fileName.StartsWith("#BELLA")) {
+                else if (fileName.StartsWith("#BELLA"))
+                {
                     _bellaSkillSounds.Add(soundUri);
                 }
-                else if (fileName.StartsWith("#CAROL")) {
+                else if (fileName.StartsWith("#CAROL"))
+                {
                     _carolSkillSounds.Add(soundUri);
                 }
-                else if (fileName.StartsWith("#DIANA")) {
+                else if (fileName.StartsWith("#DIANA"))
+                {
                     _dianaSkillSounds.Add(soundUri);
                 }
-                else if (fileName.StartsWith("#EILEEN")) {
+                else if (fileName.StartsWith("#EILEEN"))
+                {
                     _eileenSkillSounds.Add(soundUri);
                 }
             }
         }
-        public void PlayClickFXSound() {
+
+        public void PlayClickFXSound()
+        {
             RandomPlay(_clickSoundPlayer, _clickFXSounds);
         }
-        public void PlayMatchedFXSound() {
+
+        public void PlayMatchedFXSound()
+        {
             RandomPlay(_matchedSoundPlayer, _matchedFXSounds);
         }
-        public void PlayMusic() {
+
+        public void PlayMusic()
+        {
             RandomPlay(_musicSoundPlayer, _gameMusic);
         }
-        public void PlayGameCompletedSound() {
+
+        public void PlayGameCompletedSound()
+        {
             RandomPlay(_gameCompletedSoundPlayer, _gameCompletedSounds);
         }
-        public void PlaySkillActivedSound(LLKSkill skill) {
-            switch (skill) {
+
+        public void PlaySkillActivedSound(LLKSkill skill)
+        {
+            switch (skill)
+            {
                 case LLKSkill.None:
                     break;
                 case LLKSkill.AvaPower:
@@ -143,14 +165,18 @@ namespace DianaLLK_GUI.ViewModel {
             _skillActivedSoundPlayer.Play();
         }
 
-        private void RandomPlay(MediaPlayer player, List<Uri> resources) {
-            if (resources.Count <= 0) {
+        private void RandomPlay(MediaPlayer player, List<Uri> resources)
+        {
+            if (resources.Count <= 0)
+            {
                 return;
             }
             player.Open(resources[_rnd.Next(0, resources.Count)]);
             player.Play();
         }
-        private void MusicSoundPlayer_MediaEnded(object sender, EventArgs e) {
+
+        private void MusicSoundPlayer_MediaEnded(object sender, EventArgs e)
+        {
             PlayMusic();
         }
     }

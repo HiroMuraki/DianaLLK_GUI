@@ -1,5 +1,7 @@
-﻿namespace LianLianKan {
-    public enum TokenSelectResult {
+﻿namespace LianLianKan
+{
+    public enum TokenSelectResult
+    {
         None,
         Reset,
         Matched,

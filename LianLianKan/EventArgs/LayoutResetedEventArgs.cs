@@ -1,7 +1,9 @@
 ﻿using System;
 
-namespace LianLianKan {
-    public class LayoutResetedEventArgs : EventArgs {
+namespace LianLianKan
+{
+    public class LayoutResetedEventArgs : EventArgs
+    {
 
     }
 }

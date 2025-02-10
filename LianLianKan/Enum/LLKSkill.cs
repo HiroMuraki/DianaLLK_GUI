@@ -1,8 +1,10 @@
 ﻿using System;
 
-namespace LianLianKan {
+namespace LianLianKan
+{
     [Flags]
-    public enum LLKSkill {
+    public enum LLKSkill
+    {
         None = 0b0000_0000,
         AvaPower = 0b0000_0001,
         BellaPower = 0b0000_0010,

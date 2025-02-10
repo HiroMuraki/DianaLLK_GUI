@@ -18,7 +18,7 @@
                         <Grid>
                             <Border x:Name="HitArea" Background="#ffffff" Opacity="0" CornerRadius="15"/>
                             <Border x:Name="FlickLight" Background="#ffffff" Margin="5" Opacity="0" CornerRadius="15"/>
-                            <Border x:Name="HoveredHightliter" Opacity="{Binding HoveredHightliterOpacity, RelativeSource={RelativeSource TemplatedParent}}" Background="{StaticResource TextTheme}" Margin="5" CornerRadius="15"/>
+                            <Border x:Name="HoveredHighlighter" Opacity="{Binding HoveredHighlighterOpacity, RelativeSource={RelativeSource TemplatedParent}}" Background="{StaticResource TextTheme}" Margin="5" CornerRadius="15"/>
                             <Border x:Name="SelectedHighlighter" Opacity="{Binding SelectedHighlighterOpacity,RelativeSource={RelativeSource TemplatedParent}}" Background="{StaticResource TextTheme}" Margin="5" CornerRadius="15"/>
                             <Rectangle x:Name="FakeShadow" Width="100" Height="100" RadiusX="15" RadiusY="15" Margin="2,3,0,0" Fill="Black" Opacity="0.60"/>
                             <Rectangle x:Name="Content" Margin="10" Width="100" Height="100" RadiusX="15" RadiusY="15" StrokeThickness="3" Stretch="Uniform"

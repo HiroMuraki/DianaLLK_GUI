@@ -3,11 +3,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace DianaLLK_GUI.View {
+namespace DianaLLK_GUI.View
+{
     /// <summary>
     /// TokenStack.xaml 的交互逻辑
     /// </summary>
-    public partial class TokenStack : UserControl {
+    public partial class TokenStack : UserControl
+    {
         private const int _identifierWidth = 10;
         private double _aLsX;
         private double _bLsX;
@@ -15,7 +17,8 @@ namespace DianaLLK_GUI.View {
         private double _dLsX;
         private double _eLsX;
 
-        public TokenStack() {
+        public TokenStack()
+        {
             _aLsX = _identifierWidth;
             _bLsX = _identifierWidth;
             _cLsX = _identifierWidth;
@@ -24,18 +27,21 @@ namespace DianaLLK_GUI.View {
             InitializeComponent();
         }
 
-        public void AddToStack(LLKTokenType tokenType) {
-            Border img = new Border() {
+        public void AddToStack(LLKTokenType tokenType)
+        {
+            var img = new Border()
+            {
                 Height = 90,
                 Width = 90,
                 Margin = new Thickness(5),
                 CornerRadius = new CornerRadius(20),
-                Background = App.ImageDict[tokenType.ToString()] as ImageBrush,
+                Background = App.GetImage(tokenType.ToString()),
                 BorderThickness = new Thickness(2),
             };
             var tokenCategory = LLKHelper.GetTokenCategoryFromTokenType(tokenType);
             img.BorderBrush = App.ColorDict[LLKHelper.TokenCategoryThemes[tokenCategory]] as SolidColorBrush;
-            switch (tokenCategory) {
+            switch (tokenCategory)
+            {
                 case TokenCategory.None:
                 case TokenCategory.AS:
                     break;
@@ -68,7 +74,8 @@ namespace DianaLLK_GUI.View {
                     break;
             }
         }
-        public void ResetStack() {
+        public void ResetStack()
+        {
             _aLsX = _identifierWidth;
             _bLsX = _identifierWidth;
             _cLsX = _identifierWidth;

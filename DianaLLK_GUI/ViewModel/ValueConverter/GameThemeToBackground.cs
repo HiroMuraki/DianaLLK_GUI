@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using LianLianKan;
+using System;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using LianLianKan;
 
-namespace DianaLLK_GUI.ViewModel.ValueConverter {
+namespace DianaLLK_GUI.ViewModel.ValueConverter
+{
     [ValueConversion(typeof(TokenCategory), typeof(Uri))]
-    public class GameThemeToBackground : IValueConverter {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
+    public class GameThemeToBackground : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             string path;
-            switch ((TokenCategory)value) {
+            switch ((TokenCategory)value)
+            {
                 case TokenCategory.None:
                     path = "Resources/Images/Backgrounds/Background_ASTheme.jpg";
                     break;
@@ -41,7 +41,8 @@ namespace DianaLLK_GUI.ViewModel.ValueConverter {
             return new Uri(path, UriKind.Relative);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new NotImplementedException();
         }
     }

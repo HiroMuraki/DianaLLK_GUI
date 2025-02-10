@@ -6,18 +6,23 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace DianaLLK_GUI.View {
+namespace DianaLLK_GUI.View
+{
     /// <summary>
     /// SkillDisplayer.xaml 的交互逻辑
     /// </summary>
-    public partial class SkillDisplayer : UserControl {
-        public SkillDisplayer() {
+    public partial class SkillDisplayer : UserControl
+    {
+        public SkillDisplayer()
+        {
             InitializeComponent();
         }
 
-        public async void DisplaySkill(LLKSkill skill, double displayTime, double displayWidth) {
+        public async void DisplaySkill(LLKSkill skill, double displayTime, double displayWidth)
+        {
             SkillIcon.Content = LLKHelper.GetSkillDescription(skill);
-            switch (skill) {
+            switch (skill)
+            {
                 case LLKSkill.None:
                     SkillBar.Background = new SolidColorBrush(Colors.Black);
                     break;
@@ -40,7 +45,8 @@ namespace DianaLLK_GUI.View {
 
             SkillIcon.Opacity = 1;
             HorizontalAlignment = HorizontalAlignment.Left;
-            DoubleAnimation animation = new DoubleAnimation() {
+            DoubleAnimation animation = new DoubleAnimation()
+            {
                 To = displayWidth,
                 AccelerationRatio = 0.2,
                 DecelerationRatio = 0.8,
@@ -51,7 +57,8 @@ namespace DianaLLK_GUI.View {
             await Task.Delay(TimeSpan.FromMilliseconds(displayTime));
 
             HorizontalAlignment = HorizontalAlignment.Right;
-            DoubleAnimation animation2 = new DoubleAnimation() {
+            DoubleAnimation animation2 = new DoubleAnimation()
+            {
                 To = 0,
                 AccelerationRatio = 0.2,
                 DecelerationRatio = 0.8,

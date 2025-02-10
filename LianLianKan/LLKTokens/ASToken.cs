@@ -1,4 +1,6 @@
-﻿namespace LianLianKan {
-    public class ASToken : LLKTokenBase {
+﻿namespace LianLianKan
+{
+    public class ASToken : LLKTokenBase
+    {
     }
 }

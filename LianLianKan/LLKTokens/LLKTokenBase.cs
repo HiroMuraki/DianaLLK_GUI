@@ -1,17 +1,11 @@
-﻿namespace LianLianKan {
-    public abstract class LLKTokenBase {
-        private object _content;
+﻿namespace LianLianKan
+{
+    public abstract class LLKTokenBase
+    {
+        public object Content { get; set; }
 
-        public object Content {
-            get {
-                return _content;
-            }
-            set {
-                _content = value;
-            }
-        }
-
-        public LLKTokenBase() {
+        public LLKTokenBase()
+        {
 
         }
     }

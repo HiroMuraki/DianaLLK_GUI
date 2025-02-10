@@ -1,43 +1,39 @@
-public struct Coordinate {
-    private int _row;
-    private int _column;
-
-    public static readonly Coordinate NullCooriante = new Coordinate(-1, -1);
-    public int Row {
-        get {
-            return _row;
-        }
-        set {
-            _row = value;
-        }
-    }
-    public int Column {
-        get {
-            return _column;
-        }
-        set {
-            _column = value;
-        }
+public struct Coordinate
+{
+    public Coordinate(int row, int column)
+    {
+        Row = row;
+        Column = column;
     }
 
-    public Coordinate(int row, int column) {
-        _row = row;
-        _column = column;
-    }
+    public static readonly Coordinate NullCoordinate = new(-1, -1);
 
-    public static bool operator ==(Coordinate left, Coordinate right) {
+    public int Row { get; set; }
+
+    public int Column { get; set; }
+
+    public static bool operator ==(Coordinate left, Coordinate right)
+    {
         return left.Row == right.Row && left.Column == right.Column;
     }
-    public static bool operator !=(Coordinate left, Coordinate right) {
+
+    public static bool operator !=(Coordinate left, Coordinate right)
+    {
         return !(left == right);
     }
-    public override bool Equals(object obj) {
+
+    public readonly override bool Equals(object obj)
+    {
         return base.Equals(obj);
     }
-    public override int GetHashCode() {
+
+    public readonly override int GetHashCode()
+    {
         return base.GetHashCode();
     }
-    public override string ToString() {
+
+    public readonly override string ToString()
+    {
         return $"[Row = {Row}, Column = {Column}]";
     }
 }

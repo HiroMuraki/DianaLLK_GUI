@@ -1,4 +1,6 @@
-﻿namespace LianLianKan {
-    public class CarolToken : LLKTokenBase {
+﻿namespace LianLianKan
+{
+    public class CarolToken : LLKTokenBase
+    {
     }
 }

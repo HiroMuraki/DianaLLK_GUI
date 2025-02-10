@@ -1,46 +1,26 @@
 ﻿using System;
 
-namespace LianLianKan {
-    public class GameCompletedEventArgs : EventArgs {
-        private int _totalScores;
-        private int _tokenAmount;
-        private int _rowSize;
-        private int _columnSize;
-        private GameType _gameType;
+namespace LianLianKan
+{
+    public class GameCompletedEventArgs : EventArgs
+    {
+        public GameCompletedEventArgs(int totalScores, int tokenAmount, int rowSize, int columnSize, GameType gameType)
+        {
+            TotalScores = totalScores;
+            TokenAmount = tokenAmount;
+            RowSize = rowSize;
+            ColumnSize = columnSize;
+            GameType = gameType;
+        }
+        
+        public int TotalScores { get; }
 
-        public int TotalScores {
-            get {
-                return _totalScores;
-            }
-        }
-        public int TokenAmount {
-            get {
-                return _tokenAmount;
-            }
-        }
-        public int ColumnSize {
-            get {
-                return _columnSize;
-            }
-        }
-        public int RowSize {
-            get {
-                return _rowSize;
-            }
-        }
-        public GameType GameType {
-            get {
-                return _gameType;
-            }
-        }
+        public int TokenAmount { get; }
 
-        public GameCompletedEventArgs(int totalScores, int tokenAmount, int rowSize, int columnSize, GameType gameType) {
-            _totalScores = totalScores;
-            _tokenAmount = tokenAmount;
-            _rowSize = rowSize;
-            _columnSize = columnSize;
-            _gameType = gameType;
-        }
+        public int ColumnSize { get; }
 
+        public int RowSize { get; }
+
+        public GameType GameType { get; }
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace LianLianKan {
-    public enum TokenCategory {
+﻿namespace LianLianKan
+{
+    public enum TokenCategory
+    {
         None,
         AS,
         Ava,

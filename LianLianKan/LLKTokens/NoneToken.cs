@@ -1,5 +1,7 @@
-﻿namespace LianLianKan {
-    public class NoneToken : LLKTokenBase {
+﻿namespace LianLianKan
+{
+    public class NoneToken : LLKTokenBase
+    {
 
     }
 }

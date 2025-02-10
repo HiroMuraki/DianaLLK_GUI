@@ -2,11 +2,13 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DianaLLK_GUI.View {
+namespace DianaLLK_GUI.View
+{
     /// <summary>
     /// GameStatisticsControl.xaml 的交互逻辑
     /// </summary>
-    public partial class GameStatisticsControl : UserControl {
+    public partial class GameStatisticsControl : UserControl
+    {
         public static readonly RoutedEvent ConfirmedEvent =
             EventManager.RegisterRoutedEvent(nameof(Confirmed), RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(GameStatisticsControl));
         public static readonly DependencyProperty GameUsingTimeProperty =
@@ -24,76 +26,102 @@ namespace DianaLLK_GUI.View {
         public static readonly DependencyProperty GameTypeProperty =
             DependencyProperty.Register(nameof(GameType), typeof(GameType), typeof(GameStatisticsControl), new PropertyMetadata(GameType.New));
 
-        public event RoutedEventHandler Confirmed {
-            add {
+        public event RoutedEventHandler Confirmed
+        {
+            add
+            {
                 AddHandler(ConfirmedEvent, value);
             }
-            remove {
+            remove
+            {
                 RemoveHandler(ConfirmedEvent, value);
             }
         }
-        public LLKTokenType TokenType {
-            get {
+        public LLKTokenType TokenType
+        {
+            get
+            {
                 return (LLKTokenType)GetValue(TokenTypeProperty);
             }
-            set {
+            set
+            {
                 SetValue(TokenTypeProperty, value);
             }
         }
-        public double GameUsingTime {
-            get {
+        public double GameUsingTime
+        {
+            get
+            {
                 return (double)GetValue(GameUsingTimeProperty);
             }
-            set {
+            set
+            {
                 SetValue(GameUsingTimeProperty, value);
             }
         }
-        public int TokenAmount {
-            get {
+        public int TokenAmount
+        {
+            get
+            {
                 return (int)GetValue(TokenAmountProperty);
             }
-            set {
+            set
+            {
                 SetValue(TokenAmountProperty, value);
             }
         }
-        public GameType GameType {
-            get {
+        public GameType GameType
+        {
+            get
+            {
                 return (GameType)GetValue(GameTypeProperty);
             }
-            set {
+            set
+            {
                 SetValue(GameTypeProperty, value);
             }
         }
-        public string GameSize {
-            get {
+        public string GameSize
+        {
+            get
+            {
                 return (string)GetValue(GameSizeProperty);
             }
-            set {
+            set
+            {
                 SetValue(GameSizeProperty, value);
             }
         }
-        public int SkillActivedTimes {
-            get {
+        public int SkillActivedTimes
+        {
+            get
+            {
                 return (int)GetValue(SkillActivedTimesProperty);
             }
-            set {
+            set
+            {
                 SetValue(SkillActivedTimesProperty, value);
             }
         }
-        public int TotalScores {
-            get {
+        public int TotalScores
+        {
+            get
+            {
                 return (int)GetValue(TotalScoresProperty);
             }
-            set {
+            set
+            {
                 SetValue(TotalScoresProperty, value);
             }
         }
 
-        public GameStatisticsControl() {
+        public GameStatisticsControl()
+        {
             InitializeComponent();
         }
 
-        public void UpdateStatistic(GameCompletedEventArgs e, double gameUsingTime, int skillActivedTimes, int totalScore) {
+        public void UpdateStatistic(GameCompletedEventArgs e, double gameUsingTime, int skillActivedTimes, int totalScore)
+        {
             TokenAmount = e.TokenAmount;
             GameUsingTime = gameUsingTime;
             SkillActivedTimes = skillActivedTimes;
@@ -102,7 +130,8 @@ namespace DianaLLK_GUI.View {
             TokenType = ViewModel.GameSetter.GetRandomTokenType();
             GameType = e.GameType;
         }
-        private void ConfirmButton_Click(object sender, RoutedEventArgs e) {
+        private void ConfirmButton_Click(object sender, RoutedEventArgs e)
+        {
             RoutedEventArgs arg = new RoutedEventArgs(ConfirmedEvent, this);
             RaiseEvent(arg);
         }

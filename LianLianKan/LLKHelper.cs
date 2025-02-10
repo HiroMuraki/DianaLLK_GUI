@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LianLianKan {
-    public static class LLKHelper {
-        private static readonly Array _allTokenTypes;
-        private static readonly Array _allTokenCategory;
-        private static readonly Random _rnd;
-
-        public static readonly Dictionary<LLKTokenType, string> TokenResources;
-        public static readonly Dictionary<TokenCategory, string> TokenCategoryThemes;
-        public static readonly int NumTokenTypes;
-        public static readonly int NumTokenCategory;
-
-        static LLKHelper() {
+namespace LianLianKan
+{
+    public static class LLKHelper
+    {
+        static LLKHelper()
+        {
             _rnd = new Random();
             _allTokenTypes = Enum.GetValues(typeof(LLKTokenType));
             _allTokenCategory = Enum.GetValues(typeof(TokenCategory));
-            TokenResources = new Dictionary<LLKTokenType, string>() {
+            TokenResources = new Dictionary<LLKTokenType, string>()
+            {
                 [LLKTokenType.None] = null,
 
                 [LLKTokenType.AS] = "AS",
@@ -51,7 +46,8 @@ namespace LianLianKan {
                 [LLKTokenType.E4] = "E4",
                 [LLKTokenType.E5] = "E5"
             };
-            TokenCategoryThemes = new Dictionary<TokenCategory, string>() {
+            TokenCategoryThemes = new Dictionary<TokenCategory, string>()
+            {
                 [TokenCategory.None] = "",
                 [TokenCategory.AS] = "ASTheme",
                 [TokenCategory.Ava] = "AvaTheme",
@@ -64,23 +60,43 @@ namespace LianLianKan {
             NumTokenCategory = _allTokenCategory.Length - 1;
         }
 
-        public static GameRestorePack GenerateLayoutFrom(object obj) {
+        public static readonly Dictionary<LLKTokenType, string> TokenResources;
+
+        public static readonly Dictionary<TokenCategory, string> TokenCategoryThemes;
+
+        public static readonly int NumTokenTypes;
+
+        public static readonly int NumTokenCategory;
+
+        public static GameRestorePack GenerateLayoutFrom(object obj)
+        {
             return GameRestorePack.GenerateGameInfoFrom(obj);
         }
-        public static string ConvertLayoutFrom(LLKTokenType[,] tokenTypes, int numTokenTypes, int skillPoint) {
+
+        public static string ConvertLayoutFrom(LLKTokenType[,] tokenTypes, int numTokenTypes, int skillPoint)
+        {
             return GameRestorePack.GetGameInfoFrom(tokenTypes, numTokenTypes, skillPoint);
         }
-        public static string ConvertLayoutFrom(IEnumerable<LLKTokenType> tokenTypes, int rowSize, int columnSize, int numTokenTypes, int skillPoint) {
+
+        public static string ConvertLayoutFrom(IEnumerable<LLKTokenType> tokenTypes, int rowSize, int columnSize, int numTokenTypes, int skillPoint)
+        {
             return GameRestorePack.GetGameInfoFrom(tokenTypes, rowSize, columnSize, numTokenTypes, skillPoint);
         }
-        public static LLKTokenType GetRandomTokenType() {
+
+        public static LLKTokenType GetRandomTokenType()
+        {
             return (LLKTokenType)_allTokenTypes.GetValue(_rnd.Next(1, _allTokenTypes.Length));
         }
-        public static TokenCategory GetRandomTokenCategory() {
+
+        public static TokenCategory GetRandomTokenCategory()
+        {
             return (TokenCategory)_allTokenCategory.GetValue(_rnd.Next(1, _allTokenCategory.Length));
         }
-        public static TokenCategory GetTokenCategoryFromTokenType(LLKTokenType tokenType) {
-            switch (tokenType) {
+
+        public static TokenCategory GetTokenCategoryFromTokenType(LLKTokenType tokenType)
+        {
+            switch (tokenType)
+            {
                 case LLKTokenType.None:
                     return TokenCategory.None;
                 case LLKTokenType.AS:
@@ -119,23 +135,25 @@ namespace LianLianKan {
                     return TokenCategory.None;
             }
         }
-        public static string GetSkillDescription(LLKSkill skill) {
-            switch (skill) {
-                case LLKSkill.None:
-                    return "";
-                case LLKSkill.AvaPower:
-                    return "AVAVA!";
-                case LLKSkill.BellaPower:
-                    return "击穿月球!";
-                case LLKSkill.CarolPower:
-                    return "R I S E";
-                case LLKSkill.DianaPower:
-                    return "多态小草莓";
-                case LLKSkill.EileenPower:
-                    return "团队粘合";
-                default:
-                    return "";
-            }
+
+        public static string GetSkillDescription(LLKSkill skill)
+        {
+            return skill switch
+            {
+                LLKSkill.None => "",
+                LLKSkill.AvaPower => "AVAVA!",
+                LLKSkill.BellaPower => "击穿月球!",
+                LLKSkill.CarolPower => "R I S E",
+                LLKSkill.DianaPower => "多态小草莓",
+                LLKSkill.EileenPower => "团队粘合",
+                _ => "",
+            };
         }
+
+        #region NonPublic
+        private static readonly Array _allTokenTypes;
+        private static readonly Array _allTokenCategory;
+        private static readonly Random _rnd;
+        #endregion
     }
 }

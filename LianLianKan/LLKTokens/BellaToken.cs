@@ -1,4 +1,6 @@
-﻿namespace LianLianKan {
-    public class BellaToken : LLKTokenBase {
+﻿namespace LianLianKan
+{
+    public class BellaToken : LLKTokenBase
+    {
     }
 }

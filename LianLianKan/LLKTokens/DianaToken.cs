@@ -1,4 +1,6 @@
-﻿namespace LianLianKan {
-    public class DianaToken : LLKTokenBase {
+﻿namespace LianLianKan
+{
+    public class DianaToken : LLKTokenBase
+    {
     }
 }

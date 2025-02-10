@@ -1,5 +1,7 @@
-﻿namespace LianLianKan {
-    public enum GameType {
+﻿namespace LianLianKan
+{
+    public enum GameType
+    {
         New,
         Restored
     }

@@ -3,11 +3,13 @@ using LianLianKan;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DianaLLK_GUI.View {
+namespace DianaLLK_GUI.View
+{
     /// <summary>
     /// GameSetterControlPanel.xaml 的交互逻辑
     /// </summary>
-    public partial class GameSetterControlPanel : UserControl {
+    public partial class GameSetterControlPanel : UserControl
+    {
         private GameSetter _gameSetter;
 
         public static readonly RoutedEvent StartEvent =
@@ -15,35 +17,45 @@ namespace DianaLLK_GUI.View {
         public static readonly DependencyProperty GameThemeProperty =
             DependencyProperty.Register(nameof(GameTheme), typeof(TokenCategory), typeof(GameSetterControlPanel), new PropertyMetadata(TokenCategory.None));
 
-        public event RoutedEventHandler Start {
-            add {
+        public event RoutedEventHandler Start
+        {
+            add
+            {
                 AddHandler(StartEvent, value);
             }
-            remove {
+            remove
+            {
                 RemoveHandler(StartEvent, value);
             }
         }
 
-        public GameSetter GameSetter {
-            get {
+        public GameSetter GameSetter
+        {
+            get
+            {
                 return _gameSetter;
             }
         }
-        public TokenCategory GameTheme {
-            get {
+        public TokenCategory GameTheme
+        {
+            get
+            {
                 return (TokenCategory)GetValue(GameThemeProperty);
             }
-            set {
+            set
+            {
                 SetValue(GameThemeProperty, value);
             }
         }
 
-        public GameSetterControlPanel() {
+        public GameSetterControlPanel()
+        {
             _gameSetter = GameSetter.GetInstance();
             InitializeComponent();
         }
 
-        private void StartGame_Click(object sender, RoutedEventArgs e) {
+        private void StartGame_Click(object sender, RoutedEventArgs e)
+        {
             RoutedEventArgs arg = new RoutedEventArgs(StartEvent, this);
             RaiseEvent(arg);
         }

@@ -2,18 +2,15 @@
 using LianLianKan;
 using System;
 
-namespace DianaLLK_GUI {
-    public class SClickEventArgs : EventArgs {
-        private LLKSkill _skill;
+namespace DianaLLK_GUI
+{
+    public class SClickEventArgs : EventArgs
+    {
+        public LLKSkill SKill { get; }
 
-        public LLKSkill SKill {
-            get {
-                return _skill;
-            }
-        }
-
-        public SClickEventArgs(LLKSkill skill) {
-            _skill = skill;
+        public SClickEventArgs(LLKSkill skill)
+        {
+            SKill = skill;
         }
     }
 }

@@ -1,18 +1,14 @@
 ﻿using System;
 
-namespace LianLianKan {
-    public class TokenSelectedEventArgs : EventArgs {
-        private LLKTokenType _selectedType;
-
-        public LLKTokenType MyProperty {
-            get {
-                return _selectedType;
-            }
+namespace LianLianKan
+{
+    public class TokenSelectedEventArgs : EventArgs
+    {
+        public TokenSelectedEventArgs(LLKTokenType tokenType)
+        {
+            MyProperty = tokenType;
         }
 
-        public TokenSelectedEventArgs(LLKTokenType tokenType) {
-            _selectedType = tokenType;
-        }
-
+        public LLKTokenType MyProperty { get; }
     }
 }
