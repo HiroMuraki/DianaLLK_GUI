@@ -61,7 +61,7 @@ namespace LianLianKan
 
             return new GameRestorePack(tokenTypes, numTokenTypes, skillPoint);
         }
-       
+
         public static string GetGameInfoFrom(LLKTokenType[,] tokenTypes, int tokenAmount, int skillPoint)
         {
             StringBuilder sb = new StringBuilder();

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -12,30 +13,44 @@ namespace LianLianKan
 {
     public class LLKGameBase : INotifyPropertyChanged
     {
-        protected readonly CurrentTokenTypes _currentTokenTypes;
-        protected readonly Dictionary<Coordinate, bool> _coordinateChecked;
-        protected readonly object _processLocker;
-        protected readonly object _gameLayoutLocker;
-        protected LLKToken[,] _gameLayout;
-        protected LLKToken _heldToken;
-        protected int _rowSize;
-        protected int _columnSize;
-        protected GameType _gameType;
-
-        #region 公开事件
-        public event PropertyChangedEventHandler PropertyChanged;
-        public event EventHandler<GameCompletedEventArgs> GameCompleted;
-        public event EventHandler<LayoutResetedEventArgs> LayoutReseted;
-        #endregion
-
-        #region 公开属性
-        public CurrentTokenTypes CurrentTokenTypes
+        public LLKGameBase()
         {
-            get
+            _rowSize = 0;
+            _columnSize = 0;
+            _gameLayout = new LLKToken[0, 0];
+            _coordinateChecked = new Dictionary<Coordinate, bool>();
+            _currentTokenTypes = new CurrentTokenTypes();
+            _heldToken = null;
+            _processLocker = new object();
+            _gameLayoutLocker = new object();
+        }
+
+        public LLKGameBase(string testLayoutString) : this()
+        {
+            _gameLayout = new LLKToken[_rowSize, _columnSize];
+            testLayoutString = Regex.Replace(testLayoutString, @"[\s]+", " ");
+            string[] numberArray = testLayoutString.Split(' ');
+
+            for (int row = 0; row < _rowSize; row++)
             {
-                return _currentTokenTypes;
+                for (int col = 0; col < _columnSize; col++)
+                {
+                    int value = Convert.ToInt32(numberArray[(row * _columnSize) + col]);
+                    _gameLayout[row, col] = new LLKToken((LLKTokenType)value, new Coordinate(row, col));
+                }
             }
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public event EventHandler<GameCompletedEventArgs> GameCompleted;
+
+        public event EventHandler<LayoutResetEventArgs> LayoutReseted;
+
+        public event EventHandler<TokensLinkedEventArgs> TokensLinked;
+
+        public CurrentTokenTypes CurrentTokenTypes => _currentTokenTypes;
+
         public LLKTokens LLKTokenArray
         {
             get
@@ -49,6 +64,7 @@ namespace LianLianKan
                 }
             }
         }
+
         public LLKTokenTypes TokenTypeArray
         {
             get
@@ -62,59 +78,13 @@ namespace LianLianKan
                 }
             }
         }
-        public int RowSize
-        {
-            get
-            {
-                return _rowSize;
-            }
-        }
-        public int ColumnSize
-        {
-            get
-            {
-                return _columnSize;
-            }
-        }
-        public GameType GameType
-        {
-            get
-            {
-                return _gameType;
-            }
-        }
-        #endregion
 
-        #region 构造方法
-        public LLKGameBase()
-        {
-            _rowSize = 0;
-            _columnSize = 0;
-            _gameLayout = new LLKToken[0, 0];
-            _coordinateChecked = new Dictionary<Coordinate, bool>();
-            _currentTokenTypes = new CurrentTokenTypes();
-            _heldToken = null;
-            _processLocker = new object();
-            _gameLayoutLocker = new object();
-        }
-        public LLKGameBase(string testLayoutString) : this()
-        {
-            _gameLayout = new LLKToken[_rowSize, _columnSize];
-            testLayoutString = Regex.Replace(testLayoutString, @"[\s]+", " ");
-            var numberArray = testLayoutString.Split(' ');
+        public int RowSize => _rowSize;
 
-            for (int row = 0; row < _rowSize; row++)
-            {
-                for (int col = 0; col < _columnSize; col++)
-                {
-                    int value = Convert.ToInt32(numberArray[(row * _columnSize) + col]);
-                    _gameLayout[row, col] = new LLKToken((LLKTokenType)value, new Coordinate(row, col));
-                }
-            }
-        }
-        #endregion
+        public int ColumnSize => _columnSize;
 
-        #region 公开方法
+        public GameType GameType => _gameType;
+
         public virtual void StartGame(int rowSize, int columnSize, int tokenAmount)
         {
             StartGameHelper(() =>
@@ -122,8 +92,9 @@ namespace LianLianKan
                 GenerateGameLayout(rowSize, columnSize, tokenAmount);
             });
             _gameType = GameType.New;
-            LayoutReseted?.Invoke(this, new LayoutResetedEventArgs());
+            LayoutReseted?.Invoke(this, new LayoutResetEventArgs());
         }
+
         public virtual async Task StartGameAsync(int rowSize, int columnSize, int tokenAmount)
         {
             await Task.Run(() =>
@@ -137,8 +108,9 @@ namespace LianLianKan
                     _gameType = GameType.New;
                 }
             });
-            LayoutReseted?.Invoke(this, new LayoutResetedEventArgs());
+            LayoutReseted?.Invoke(this, new LayoutResetEventArgs());
         }
+
         public virtual void RestoreGame(LLKTokenType[,] tokenTypes, int tokenAmount)
         {
             StartGameHelper(() =>
@@ -146,8 +118,9 @@ namespace LianLianKan
                 RestoreGameLayout(tokenTypes, tokenAmount);
             });
             _gameType = GameType.Restored;
-            LayoutReseted?.Invoke(this, new LayoutResetedEventArgs());
+            LayoutReseted?.Invoke(this, new LayoutResetEventArgs());
         }
+
         public virtual async Task RestoreGameAsync(LLKTokenType[,] tokenTypes, int tokenAmount)
         {
             await Task.Run(() =>
@@ -161,51 +134,20 @@ namespace LianLianKan
                 }
             });
             _gameType = GameType.Restored;
-            LayoutReseted?.Invoke(this, new LayoutResetedEventArgs());
+            LayoutReseted?.Invoke(this, new LayoutResetEventArgs());
         }
+
         public virtual TokenSelectResult SelectToken(LLKToken token)
         {
-            var matchedTokenType = _heldToken?.TokenType;
-            var a = _heldToken;
-            var b = token;
+            LLKTokenType? matchedTokenType = _heldToken?.TokenType;
+            LLKToken a = _heldToken;
+            LLKToken b = token;
             TokenSelectResult tokenSelectResult = SelectTokenHelper(token);
             if (tokenSelectResult == TokenSelectResult.Matched)
             {
-                a.OnMatched();
-                b.OnMatched();
-                if (IsGameCompleted())
-                {
-                    int scores = GetTotalScores();
-                    GameCompleted?.Invoke(this, new GameCompletedEventArgs(scores, _currentTokenTypes.Count, _rowSize, _columnSize, _gameType));
-                }
-            }
-            else if (tokenSelectResult == TokenSelectResult.Reset)
-            {
-                a.OnReset();
-                b.OnReset();
-            }
-            else if (tokenSelectResult == TokenSelectResult.Wait)
-            {
-                a.OnSelected();
-            }
-            return tokenSelectResult;
-        }
-        public virtual async Task<TokenSelectResult> SelectTokenAsync(LLKToken token)
-        {
-            var matchedTokenType = _heldToken?.TokenType;
-            var a = _heldToken;
-            var b = token;
-            TokenSelectResult tokenSelectResult = await Task.Run(() =>
-            {
-                lock (_processLocker)
-                {
-                    return SelectTokenHelper(token);
-                }
-            });
-            if (tokenSelectResult == TokenSelectResult.Matched)
-            {
-                a.OnMatched(new TokenMatchedEventArgs(matchedTokenType.Value, true));
-                b.OnMatched(new TokenMatchedEventArgs(matchedTokenType.Value, true));
+                a.OnMatched(new TokenMatchedEventArgs(matchedTokenType.Value));
+                b.OnMatched(new TokenMatchedEventArgs(matchedTokenType.Value));
+                TokensLinked?.Invoke(this, new TokensLinkedEventArgs(a, b));
                 if (IsGameCompleted())
                 {
                     int scores = GetTotalScores();
@@ -223,9 +165,10 @@ namespace LianLianKan
             }
             return tokenSelectResult;
         }
+
         public override string ToString()
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             for (int row = 0; row < _rowSize; row++)
             {
                 for (int col = 0; col < _columnSize; col++)
@@ -236,8 +179,18 @@ namespace LianLianKan
             }
             return sb.ToString();
         }
-        #endregion
 
+        #region NonPublic
+        protected readonly CurrentTokenTypes _currentTokenTypes;
+        protected readonly Dictionary<Coordinate, bool> _coordinateChecked;
+        protected readonly object _processLocker;
+        protected readonly object _gameLayoutLocker;
+        protected LLKToken[,] _gameLayout;
+        protected LLKToken _heldToken;
+        protected List<LLKToken> GetTokens() => _gameLayout.OfType<LLKToken>().ToList();
+        protected int _rowSize;
+        protected int _columnSize;
+        protected GameType _gameType;
         protected virtual TokenSelectResult SelectTokenHelper(LLKToken token)
         {
             // 如果待选token为null，且tokenType不为None，则将待选token设为当前token
@@ -304,10 +257,10 @@ namespace LianLianKan
                 throw new ArgumentException("行列设置无效，行列数乘积应为偶数");
             }
 
-            Random rnd = new Random();
+            var rnd = new Random();
             // 获取可用的token类型
-            CurrentTokenTypes allTokens = new CurrentTokenTypes();
-            foreach (var item in Enum.GetValues(typeof(LLKTokenType)))
+            var allTokens = new CurrentTokenTypes();
+            foreach (object item in Enum.GetValues(typeof(LLKTokenType)))
             {
                 var tokenType = (LLKTokenType)item;
                 if (tokenType == LLKTokenType.None)
@@ -324,12 +277,12 @@ namespace LianLianKan
                 {
                     break;
                 }
-                var tokenType = allTokens[rnd.Next(0, allTokens.Count)];
+                LLKTokenType tokenType = allTokens[rnd.Next(0, allTokens.Count)];
                 allTokens.Remove(tokenType);
                 _currentTokenTypes.Add(tokenType);
             }
             // 随机添加token
-            CurrentTokenTypes tokenTypes = new CurrentTokenTypes(capacity);
+            var tokenTypes = new CurrentTokenTypes(capacity);
             int cycleTimes = capacity / 2;
             for (int i = 0; i < cycleTimes; i++)
             {
@@ -351,9 +304,7 @@ namespace LianLianKan
             for (int i = 0; i < capacity; i++)
             {
                 int j = rnd.Next(i, capacity);
-                var t = tokenTypes[i];
-                tokenTypes[i] = tokenTypes[j];
-                tokenTypes[j] = t;
+                (tokenTypes[j], tokenTypes[i]) = (tokenTypes[i], tokenTypes[j]);
             }
             // 添加至游戏布局
             _rowSize = rowSize;
@@ -404,10 +355,15 @@ namespace LianLianKan
         }
         protected virtual bool IsMatchable(Coordinate startCoordinate, Coordinate targetCoordinate)
         {
-            var result = IsConnectable(startCoordinate, targetCoordinate);
+            bool isConnectable = LinkGameHelper.TryConnect(
+                GetTokens(),
+                startCoordinate,
+                targetCoordinate,
+                out Coordinate[] nodes);
+
             ResetCoordinateStatus();
             // 如果不连通，直接返回false
-            if (result == false)
+            if (isConnectable == false)
             {
                 return false;
             }
@@ -426,91 +382,6 @@ namespace LianLianKan
                     return false;
                 }
             }
-        }
-        protected virtual bool IsConnectable(Coordinate startCoordinate, Coordinate targetCoordinate)
-        {
-            // 先将自己标记为已检查
-            _coordinateChecked[startCoordinate] = true;
-            // 设置待检查列表
-            List<Coordinate> checkList = new List<Coordinate>();
-            for (int i = -1; i < 2; i++)
-            {
-                for (int j = -1; j < 2; j++)
-                {
-                    // 获取新位置
-                    int nRow = startCoordinate.Row + i;
-                    int nCol = startCoordinate.Column + j;
-                    Coordinate nCoordinate = new Coordinate(nRow, nCol);
-                    // 跳过四角
-                    if ((i == -1 || i == 1) && (j == -1 || j == 1))
-                    {
-                        continue;
-                    }
-                    // 跳过中心
-                    if (i == 0 && j == 0)
-                    {
-                        continue;
-                    }
-                    // 跳过负位置
-                    if (nRow < 0 || nCol < 0)
-                    {
-                        continue;
-                    }
-                    // 跳过越界位置
-                    if (nRow >= _rowSize || nCol >= _columnSize)
-                    {
-                        continue;
-                    }
-                    // 跳过已检查
-                    if (_coordinateChecked[nCoordinate] == true)
-                    {
-                        continue;
-                    }
-                    checkList.Add(nCoordinate);
-                }
-            }
-            // 开始检查
-            foreach (var coordinate in checkList)
-            {
-                // 检查该位置是否为目标位置，是立即返回True
-                if (coordinate == targetCoordinate)
-                {
-                    _coordinateChecked[coordinate] = true;
-                    return true;
-                }
-                // 否则如果该位置是空的话，则递归检查
-                else if (_gameLayout[coordinate.Row, coordinate.Column].TokenType == LLKTokenType.None)
-                {
-                    bool result = IsConnectable(coordinate, targetCoordinate);
-                    // 递归检查结果为true，直接返回
-                    if (result == true)
-                    {
-                        return result;
-                    }
-                    // 否则如果待查列表中还存在未检查坐标，则跳过
-                    bool allChecked = true;
-                    foreach (var pos in checkList)
-                    {
-                        if (_coordinateChecked[pos] == false)
-                        {
-                            allChecked = false;
-                            break;
-                        }
-                    }
-                    // 否则若所有坐标都检查完毕，返回false
-                    if (allChecked)
-                    {
-                        return result;
-                    }
-                }
-                // 否则跳过此方块
-                else
-                {
-                    continue;
-                }
-            }
-            // 若检查完毕后到了这里，说明没有直接连同
-            return false;
         }
         protected virtual bool IsGameCompleted()
         {
@@ -544,9 +415,10 @@ namespace LianLianKan
         {
             GameCompleted?.Invoke(this, e);
         }
-        protected void OnLayoutRested(LayoutResetedEventArgs e)
+        protected void OnLayoutRested(LayoutResetEventArgs e)
         {
             LayoutReseted?.Invoke(this, e);
         }
+        #endregion
     }
 }

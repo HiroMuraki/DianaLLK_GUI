@@ -4,9 +4,6 @@ using System.Windows.Controls;
 
 namespace DianaLLK_GUI.View
 {
-    /// <summary>
-    /// GameStatisticsControl.xaml 的交互逻辑
-    /// </summary>
     public partial class GameStatisticsControl : UserControl
     {
         public static readonly RoutedEvent ConfirmedEvent =
@@ -28,91 +25,50 @@ namespace DianaLLK_GUI.View
 
         public event RoutedEventHandler Confirmed
         {
-            add
-            {
-                AddHandler(ConfirmedEvent, value);
-            }
-            remove
-            {
-                RemoveHandler(ConfirmedEvent, value);
-            }
+            add => AddHandler(ConfirmedEvent, value);
+            remove => RemoveHandler(ConfirmedEvent, value);
         }
+
         public LLKTokenType TokenType
         {
-            get
-            {
-                return (LLKTokenType)GetValue(TokenTypeProperty);
-            }
-            set
-            {
-                SetValue(TokenTypeProperty, value);
-            }
+            get => (LLKTokenType)GetValue(TokenTypeProperty);
+            set => SetValue(TokenTypeProperty, value);
         }
+
         public double GameUsingTime
         {
-            get
-            {
-                return (double)GetValue(GameUsingTimeProperty);
-            }
-            set
-            {
-                SetValue(GameUsingTimeProperty, value);
-            }
+            get => (double)GetValue(GameUsingTimeProperty);
+            set => SetValue(GameUsingTimeProperty, value);
         }
+
         public int TokenAmount
         {
-            get
-            {
-                return (int)GetValue(TokenAmountProperty);
-            }
-            set
-            {
-                SetValue(TokenAmountProperty, value);
-            }
+            get => (int)GetValue(TokenAmountProperty);
+            set => SetValue(TokenAmountProperty, value);
         }
+
         public GameType GameType
         {
-            get
-            {
-                return (GameType)GetValue(GameTypeProperty);
-            }
-            set
-            {
-                SetValue(GameTypeProperty, value);
-            }
+            get => (GameType)GetValue(GameTypeProperty);
+            set => SetValue(GameTypeProperty, value);
         }
+
         public string GameSize
         {
-            get
-            {
-                return (string)GetValue(GameSizeProperty);
-            }
-            set
-            {
-                SetValue(GameSizeProperty, value);
-            }
+            get => (string)GetValue(GameSizeProperty);
+            set => SetValue(GameSizeProperty, value);
         }
+
         public int SkillActivedTimes
         {
-            get
-            {
-                return (int)GetValue(SkillActivedTimesProperty);
-            }
-            set
-            {
-                SetValue(SkillActivedTimesProperty, value);
-            }
+            get => (int)GetValue(SkillActivedTimesProperty);
+            set => SetValue(SkillActivedTimesProperty, value);
         }
+
         public int TotalScores
         {
-            get
-            {
-                return (int)GetValue(TotalScoresProperty);
-            }
-            set
-            {
-                SetValue(TotalScoresProperty, value);
-            }
+            get => (int)GetValue(TotalScoresProperty);
+            set => SetValue(TotalScoresProperty, value);
         }
 
         public GameStatisticsControl()
@@ -130,10 +86,14 @@ namespace DianaLLK_GUI.View
             TokenType = ViewModel.GameSetter.GetRandomTokenType();
             GameType = e.GameType;
         }
+
+
+        #region NonPublic
         private void ConfirmButton_Click(object sender, RoutedEventArgs e)
         {
-            RoutedEventArgs arg = new RoutedEventArgs(ConfirmedEvent, this);
+            var arg = new RoutedEventArgs(ConfirmedEvent, this);
             RaiseEvent(arg);
         }
+        #endregion
     }
 }

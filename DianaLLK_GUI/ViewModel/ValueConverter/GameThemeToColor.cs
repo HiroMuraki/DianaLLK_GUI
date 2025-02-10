@@ -14,7 +14,7 @@ namespace DianaLLK_GUI.ViewModel.ValueConverter
             try
             {
                 var tokenCategory = (TokenCategory)value;
-                return App.ColorDict[LLKHelper.TokenCategoryThemes[tokenCategory]] as Brush;
+                return App.GetColor(LLKHelper.TokenCategoryThemes[tokenCategory]);
 
             }
             catch (Exception)

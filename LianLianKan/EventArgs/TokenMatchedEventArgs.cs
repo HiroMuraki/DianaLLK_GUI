@@ -4,14 +4,11 @@ namespace LianLianKan
 {
     public class TokenMatchedEventArgs : EventArgs
     {
-        public TokenMatchedEventArgs(LLKTokenType matchedTokenType, bool matched)
+        public TokenMatchedEventArgs(LLKTokenType matchedTokenType)
         {
             TokenType = matchedTokenType;
-            Sucess = matched;
         }
 
         public LLKTokenType TokenType { get; }
-
-        public bool Sucess { get; }
     }
 }

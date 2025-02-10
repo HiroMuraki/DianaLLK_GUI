@@ -15,7 +15,7 @@ namespace DianaLLK_GUI.ViewModel.ValueConverter
             try
             {
                 var tokenType = (LLKTokenType)value;
-                return App.GetImage(LLKHelper.TokenResources[tokenType]);
+                return App.GetImage(LLKHelper.TokenResources[tokenType], ImageType.Token);
             }
             catch (Exception)
             {

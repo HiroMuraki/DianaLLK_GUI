@@ -2,7 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:View="clr-namespace:DianaLLK_GUI.View"
-    xmlns:local="clr-namespace:DianaLLK_GUI">
+    xmlns:local="clr-namespace:DianaLLK_GUI"
+    xmlns:vc="clr-namespace:DianaLLK_GUI.ViewModel.ValueConverter">
 
     <Style TargetType="{x:Type View:LLKTokenRound}">
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -14,23 +15,56 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type View:LLKTokenRound}">
-                    <Viewbox>
-                        <Grid>
-                            <Border x:Name="HitArea" Background="#ffffff" Opacity="0" CornerRadius="15"/>
-                            <Border x:Name="FlickLight" Background="#ffffff" Margin="5" Opacity="0" CornerRadius="15"/>
-                            <Border x:Name="HoveredHighlighter" Opacity="{Binding HoveredHighlighterOpacity, RelativeSource={RelativeSource TemplatedParent}}" Background="{StaticResource TextTheme}" Margin="5" CornerRadius="15"/>
-                            <Border x:Name="SelectedHighlighter" Opacity="{Binding SelectedHighlighterOpacity,RelativeSource={RelativeSource TemplatedParent}}" Background="{StaticResource TextTheme}" Margin="5" CornerRadius="15"/>
-                            <Rectangle x:Name="FakeShadow" Width="100" Height="100" RadiusX="15" RadiusY="15" Margin="2,3,0,0" Fill="Black" Opacity="0.60"/>
-                            <Rectangle x:Name="Content" Margin="10" Width="100" Height="100" RadiusX="15" RadiusY="15" StrokeThickness="3" Stretch="Uniform"
-                                     Stroke="{Binding Token.TokenType,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource LLKTokenTypeToColorFrame}}" 
-                                     Fill="{Binding Token.TokenType,RelativeSource={RelativeSource TemplatedParent},Converter={StaticResource LLKTokenTypeToImage}}" />
-                        </Grid>
-                    </Viewbox>
+                    <Grid>
+                        <Border
+                                x:Name="HitArea"
+                                Background="#ffffff"
+                                CornerRadius="15"
+                                Opacity="0" />
+                        <Border
+                                x:Name="FlickLight"
+                                Margin="5"
+                                Background="#ffffff"
+                                CornerRadius="15"
+                                Opacity="0" />
+                        <Border
+                                x:Name="HoveredHighlighter"
+                                Margin="5"
+                                Background="{StaticResource TextTheme}"
+                                CornerRadius="15"
+                                Opacity="{Binding HoveredHighlighterOpacity, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <Border
+                                x:Name="SelectedHighlighter"
+                                Margin="5"
+                                Background="{StaticResource TextTheme}"
+                                CornerRadius="15"
+                                Opacity="{Binding SelectedHighlighterOpacity, RelativeSource={RelativeSource TemplatedParent}}" />
+                        <Rectangle
+                                x:Name="FakeShadow"
+                                Width="100"
+                                Height="100"
+                                Margin="2,3,0,0"
+                                Fill="Black"
+                                Opacity="0.60"
+                                RadiusX="15"
+                                RadiusY="15" />
+                        <Rectangle
+                                x:Name="Content"
+                                Width="100"
+                                Height="100"
+                                Margin="10"
+                                Fill="{Binding Token.TokenType, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource LLKTokenTypeToImage}}"
+                                RadiusX="15"
+                                RadiusY="15"
+                                Stretch="Uniform"
+                                Stroke="{Binding Token.TokenType, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource LLKTokenTypeToColorFrame}}"
+                                StrokeThickness="3" />
+                    </Grid>
                     <ControlTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Token.TokenType,RelativeSource={RelativeSource Self}}" Value="None">
+                        <DataTrigger Binding="{Binding Token.TokenType, RelativeSource={RelativeSource Self}}" Value="None">
                             <Setter TargetName="FlickLight" Property="Opacity" Value="0.50" />
-                            <Setter TargetName="FakeShadow"  Property="Opacity" Value="0.01" />
-                            <Setter TargetName="FakeShadow"  Property="Fill" Value="White" />
+                            <Setter TargetName="FakeShadow" Property="Opacity" Value="0.01" />
+                            <Setter TargetName="FakeShadow" Property="Fill" Value="White" />
                         </DataTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -45,29 +79,20 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type View:SButton}">
                     <Viewbox>
-                        <Rectangle Width="200" Height="100" Fill="{TemplateBinding Background}" RadiusX="15" RadiusY="15"
-                                       Stroke="{TemplateBinding BorderBrush}" StrokeThickness="3" Stretch="Fill">
-                        </Rectangle>
+                        <Rectangle
+                            Width="200"
+                            Height="100"
+                            Fill="{Binding Skill, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={x:Static vc:LLKSkillToImageBrush.Default}}"
+                            RadiusX="15"
+                            RadiusY="15"
+                            Stretch="Fill"
+                            Stroke="{TemplateBinding BorderBrush}"
+                            StrokeThickness="3" />
                     </Viewbox>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Opacity" Value="0.65" />
                             <Setter Property="BorderBrush" Value="{StaticResource TextTheme}" />
-                        </Trigger>
-                        <Trigger Property="Skill" Value="AvaPower">
-                            <Setter Property="Background" Value="{StaticResource AVA_SKILL}" />
-                        </Trigger>
-                        <Trigger Property="Skill" Value="BellaPower">
-                            <Setter Property="Background" Value="{StaticResource BELLA_SKILL}" />
-                        </Trigger>
-                        <Trigger Property="Skill" Value="CarolPower">
-                            <Setter Property="Background" Value="{StaticResource CAROL_SKILL}" />
-                        </Trigger>
-                        <Trigger Property="Skill" Value="DianaPower">
-                            <Setter Property="Background" Value="{StaticResource DIANA_SKILL}" />
-                        </Trigger>
-                        <Trigger Property="Skill" Value="EileenPower">
-                            <Setter Property="Background" Value="{StaticResource EILEEN_SKILL}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -76,48 +101,77 @@
     </Style>
 
     <Style TargetType="{x:Type View:RSlider}">
-        <Setter Property="Background" Value="White"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type View:RSlider}">
                     <Grid x:Name="GridRoot">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <!-- TickBar shows the ticks for Slider -->
-                        <TickBar Grid.Row="0" Visibility="Collapsed" x:Name="TopTick"
-                                    SnapsToDevicePixels="True" Placement="Top" Fill="{TemplateBinding Foreground}"/>
-                        <TickBar Visibility="Collapsed" Grid.Row="2" x:Name="BottomTick"
-                                 SnapsToDevicePixels="True" Placement="Bottom" Fill="{TemplateBinding Foreground}"/>
+                        <!--  TickBar shows the ticks for Slider  -->
+                        <TickBar
+                            x:Name="TopTick"
+                            Grid.Row="0"
+                            Fill="{TemplateBinding Foreground}"
+                            Placement="Top"
+                            SnapsToDevicePixels="True"
+                            Visibility="Collapsed" />
+                        <TickBar
+                            x:Name="BottomTick"
+                            Grid.Row="2"
+                            Fill="{TemplateBinding Foreground}"
+                            Placement="Bottom"
+                            SnapsToDevicePixels="True"
+                            Visibility="Collapsed" />
 
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition/>
+                                <ColumnDefinition Width="40" />
+                                <ColumnDefinition />
                             </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Margin="5,5,0,5" BorderBrush="{StaticResource TextTheme}" BorderThickness="2,2,0,2"
-                                    CornerRadius="5,0,0,5">
-                                <Label Content="{TemplateBinding Value}" FontWeight="Bold" Foreground="{StaticResource TextTheme}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                            <Border
+                                Grid.Column="0"
+                                Margin="5,5,0,5"
+                                BorderBrush="{StaticResource TextTheme}"
+                                BorderThickness="2,2,0,2"
+                                CornerRadius="5,0,0,5">
+                                <Label
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Content="{TemplateBinding Value}"
+                                    FontWeight="Bold"
+                                    Foreground="{StaticResource TextTheme}" />
                             </Border>
-                            <Border Grid.Column="1" x:Name="Border" Margin="0,5,5,5" CornerRadius="0,5,5,0" 
-                                    Background="{TemplateBinding Background}" 
-                                    BorderBrush="{TemplateBinding BorderBrush}" 
-                                    BorderThickness="{TemplateBinding BorderThickness}"/>
-                            <!-- The Track lays out the repeat buttons and thumb -->
-                            <Track Grid.Column="1" x:Name="PART_Track" Margin="2,0,6,0">
+                            <Border
+                                x:Name="Border"
+                                Grid.Column="1"
+                                Margin="0,5,5,5"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0,5,5,0" />
+                            <!--  The Track lays out the repeat buttons and thumb  -->
+                            <Track
+                                x:Name="PART_Track"
+                                Grid.Column="1"
+                                Margin="2,0,6,0">
                                 <Track.IncreaseRepeatButton>
-                                    <RepeatButton Style="{StaticResource GeneralSliderRepeatButton}" Command="Slider.IncreaseLarge"/>
+                                    <RepeatButton Command="Slider.IncreaseLarge" Style="{StaticResource GeneralSliderRepeatButton}" />
                                 </Track.IncreaseRepeatButton>
                                 <Track.Thumb>
-                                    <Thumb Style="{StaticResource GeneralSliderThumb}" Height="20" Width="10"/>
+                                    <Thumb
+                                        Width="10"
+                                        Height="20"
+                                        Style="{StaticResource GeneralSliderThumb}" />
                                 </Track.Thumb>
                                 <Track.DecreaseRepeatButton>
-                                    <RepeatButton Style="{StaticResource GeneralSliderRepeatButton}" Command="Slider.DecreaseLarge"/>
+                                    <RepeatButton Command="Slider.DecreaseLarge" Style="{StaticResource GeneralSliderRepeatButton}" />
                                 </Track.DecreaseRepeatButton>
                             </Track>
                         </Grid>
@@ -125,29 +179,29 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="TickPlacement" Value="TopLeft">
-                            <Setter Property="Visibility" Value="Visible" TargetName="TopTick"/>
+                            <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="TickPlacement" Value="BottomRight">
-                            <Setter Property="Visibility" Value="Visible" TargetName="BottomTick"/>
+                            <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="TickPlacement" Value="Both">
-                            <Setter Property="Visibility" Value="Visible" TargetName="TopTick"/>
-                            <Setter Property="Visibility" Value="Visible" TargetName="BottomTick"/>
+                            <Setter TargetName="TopTick" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="BottomTick" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="false">
-                            <Setter Property="Background" Value="#FFFFFF" TargetName="Border"/>
-                            <Setter Property="BorderBrush" Value="#FFFFFF" TargetName="Border"/>
+                            <Setter TargetName="Border" Property="Background" Value="#FFFFFF" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="#FFFFFF" />
                         </Trigger>
 
-                        <!-- Use a rotation to create a Vertical Slider form the default Horizontal -->
+                        <!--  Use a rotation to create a Vertical Slider form the default Horizontal  -->
                         <Trigger Property="Orientation" Value="Vertical">
-                            <Setter Property="LayoutTransform" TargetName="GridRoot">
+                            <Setter TargetName="GridRoot" Property="LayoutTransform">
                                 <Setter.Value>
-                                    <RotateTransform Angle="-90"/>
+                                    <RotateTransform Angle="-90" />
                                 </Setter.Value>
                             </Setter>
-                            <!-- Track rotates itself based on orientation so need to force it back -->
-                            <Setter TargetName="PART_Track" Property="Orientation" Value="Horizontal"/>
+                            <!--  Track rotates itself based on orientation so need to force it back  -->
+                            <Setter TargetName="PART_Track" Property="Orientation" Value="Horizontal" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>

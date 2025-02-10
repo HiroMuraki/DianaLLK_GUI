@@ -6,22 +6,14 @@ using System.Windows.Media.Animation;
 
 namespace DianaLLK_GUI.View
 {
-    /// <summary>
-    /// TipBar.xaml 的交互逻辑
-    /// </summary>
     public partial class TipBar : UserControl
     {
         public object Tip
         {
-            get
-            {
-                return GetValue(TipProperty);
-            }
-            set
-            {
-                SetValue(TipProperty, value);
-            }
+            get => GetValue(TipProperty);
+            set => SetValue(TipProperty, value);
         }
+
         public static readonly DependencyProperty TipProperty =
             DependencyProperty.Register(nameof(Tip), typeof(object), typeof(TipBar), new PropertyMetadata(null));
 
@@ -33,7 +25,7 @@ namespace DianaLLK_GUI.View
         public async void DisplayTip(object tip, TimeSpan displayTime)
         {
             Tip = tip;
-            DoubleAnimation animation = new DoubleAnimation()
+            var animation = new DoubleAnimation()
             {
                 To = 40,
                 AccelerationRatio = 0.2,
@@ -42,7 +34,7 @@ namespace DianaLLK_GUI.View
             };
             BeginAnimation(HeightProperty, animation);
             await Task.Delay(displayTime);
-            DoubleAnimation animation2 = new DoubleAnimation()
+            var animation2 = new DoubleAnimation()
             {
                 To = 0,
                 AccelerationRatio = 0.2,

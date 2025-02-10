@@ -12,7 +12,7 @@ namespace LianLianKan
             ColumnSize = columnSize;
             GameType = gameType;
         }
-        
+
         public int TotalScores { get; }
 
         public int TokenAmount { get; }

@@ -27,25 +27,25 @@ namespace DianaLLK_GUI.View
                     SkillBar.Background = new SolidColorBrush(Colors.Black);
                     break;
                 case LLKSkill.AvaPower:
-                    SkillBar.Background = App.ColorDict[LLKHelper.TokenCategoryThemes[TokenCategory.Ava]] as SolidColorBrush;
+                    SkillBar.Background = App.GetColor(LLKHelper.TokenCategoryThemes[TokenCategory.Ava]);
                     break;
                 case LLKSkill.BellaPower:
-                    SkillBar.Background = App.ColorDict[LLKHelper.TokenCategoryThemes[TokenCategory.Bella]] as SolidColorBrush;
+                    SkillBar.Background = App.GetColor(LLKHelper.TokenCategoryThemes[TokenCategory.Bella]);
                     break;
                 case LLKSkill.CarolPower:
-                    SkillBar.Background = App.ColorDict[LLKHelper.TokenCategoryThemes[TokenCategory.Carol]] as SolidColorBrush;
+                    SkillBar.Background = App.GetColor(LLKHelper.TokenCategoryThemes[TokenCategory.Carol]);
                     break;
                 case LLKSkill.DianaPower:
-                    SkillBar.Background = App.ColorDict[LLKHelper.TokenCategoryThemes[TokenCategory.Diana]] as SolidColorBrush;
+                    SkillBar.Background = App.GetColor(LLKHelper.TokenCategoryThemes[TokenCategory.Diana]);
                     break;
                 case LLKSkill.EileenPower:
-                    SkillBar.Background = App.ColorDict[LLKHelper.TokenCategoryThemes[TokenCategory.Eileen]] as SolidColorBrush;
+                    SkillBar.Background = App.GetColor(LLKHelper.TokenCategoryThemes[TokenCategory.Eileen]);
                     break;
             }
 
             SkillIcon.Opacity = 1;
             HorizontalAlignment = HorizontalAlignment.Left;
-            DoubleAnimation animation = new DoubleAnimation()
+            var animation = new DoubleAnimation()
             {
                 To = displayWidth,
                 AccelerationRatio = 0.2,
@@ -57,7 +57,7 @@ namespace DianaLLK_GUI.View
             await Task.Delay(TimeSpan.FromMilliseconds(displayTime));
 
             HorizontalAlignment = HorizontalAlignment.Right;
-            DoubleAnimation animation2 = new DoubleAnimation()
+            var animation2 = new DoubleAnimation()
             {
                 To = 0,
                 AccelerationRatio = 0.2,

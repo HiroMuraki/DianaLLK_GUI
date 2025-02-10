@@ -5,25 +5,16 @@ namespace DianaLLK_GUI.ViewModel
 {
     public class GameSetter : INotifyPropertyChanged
     {
-        private static GameSetter _singletonObject;
-        private static readonly int _minSize;
-        private static readonly int _maxSize;
-        private static readonly int _minTokenAmount;
-        private int _rowSize;
-        private int _columnSize;
-        private int _tokenAmount;
+        public static GameSetter Instance { get; } = new();
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int RowSize
         {
-            get
-            {
-                return _rowSize;
-            }
+            get => _rowSize;
             set
             {
-                if (value < _minSize || value > _maxSize)
+                if (value < MinSize || value > MaxSize)
                 {
                     return;
                 }
@@ -31,31 +22,27 @@ namespace DianaLLK_GUI.ViewModel
                 OnPropertyChanged(nameof(RowSize));
             }
         }
+
         public int ColumnSize
         {
-            get
-            {
-                return _columnSize;
-            }
+            get => _columnSize;
             set
             {
                 _columnSize = value;
-                if (value < _minSize || value > _maxSize)
+                if (value < MinSize || value > MaxSize)
                 {
                     return;
                 }
                 OnPropertyChanged(nameof(ColumnSize));
             }
         }
+
         public int TokenAmount
         {
-            get
-            {
-                return _tokenAmount;
-            }
+            get => _tokenAmount;
             set
             {
-                if (value < _minTokenAmount)
+                if (value < MinTokenAmount)
                 {
                     return;
                 }
@@ -63,75 +50,44 @@ namespace DianaLLK_GUI.ViewModel
                 OnPropertyChanged(nameof(TokenAmount));
             }
         }
-        public int MinSize
-        {
-            get
-            {
-                return _minSize;
-            }
-        }
-        public int MaxSize
-        {
-            get
-            {
-                return _maxSize;
-            }
-        }
-        public int MinTokenAmount
-        {
-            get
-            {
-                return _minTokenAmount;
-            }
-        }
-        public int MaxTokenAmount
-        {
-            get
-            {
-                return LLKHelper.NumTokenTypes;
-            }
-        }
-        public LLKTokenType CurrentAvatar
-        {
-            get
-            {
-                return GetRandomTokenType();
-            }
-        }
 
-        static GameSetter()
-        {
-            _singletonObject = new GameSetter();
-            _minSize = 6;
-            _maxSize = 25;
-            _minTokenAmount = 6;
-        }
-        private GameSetter()
-        {
+        public int MinSize => 6;
 
-        }
-        public static GameSetter GetInstance()
-        {
-            _singletonObject ??= new GameSetter();
-            return _singletonObject;
-        }
+        public int MaxSize => 25;
+
+        public int MinTokenAmount => 6;
+
+        public int MaxTokenAmount => LLKHelper.NumTokenTypes;
+
+        public LLKTokenType CurrentAvatar => GetRandomTokenType();
 
         public static LLKTokenType GetRandomTokenType()
         {
             return LLKHelper.GetRandomTokenType();
         }
+
         public static TokenCategory GetRandomGameTheme()
         {
             return LLKHelper.GetRandomTokenCategory();
         }
+
         public void OnCurrentAvatarChanged()
         {
             OnPropertyChanged(nameof(CurrentAvatar));
         }
 
+        #region NonPublic
+        private GameSetter()
+        {
+
+        }
+        private int _rowSize;
+        private int _columnSize;
+        private int _tokenAmount;
         private void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion
     }
 }

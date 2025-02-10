@@ -2,9 +2,9 @@
 
 namespace LianLianKan
 {
-    public class SkillActivedEventArgs : EventArgs
+    public class SkillActivatedEventArgs : EventArgs
     {
-        public SkillActivedEventArgs(LLKSkill skill, bool activeResult)
+        public SkillActivatedEventArgs(LLKSkill skill, bool activeResult)
         {
             Skill = skill;
             ActiveResult = activeResult;

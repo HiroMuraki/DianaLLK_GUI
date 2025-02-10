@@ -2,7 +2,7 @@
 
 namespace LianLianKan
 {
-    public class LayoutResetedEventArgs : EventArgs
+    public class LayoutResetEventArgs : EventArgs
     {
 
     }

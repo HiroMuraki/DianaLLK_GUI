@@ -1,7 +1,6 @@
 ﻿using LianLianKan;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
 
 namespace DianaLLK_GUI.View
 {
@@ -35,11 +34,11 @@ namespace DianaLLK_GUI.View
                 Width = 90,
                 Margin = new Thickness(5),
                 CornerRadius = new CornerRadius(20),
-                Background = App.GetImage(tokenType.ToString()),
+                Background = App.GetImage(tokenType.ToString(), ImageType.Token),
                 BorderThickness = new Thickness(2),
             };
-            var tokenCategory = LLKHelper.GetTokenCategoryFromTokenType(tokenType);
-            img.BorderBrush = App.ColorDict[LLKHelper.TokenCategoryThemes[tokenCategory]] as SolidColorBrush;
+            TokenCategory tokenCategory = LLKHelper.GetTokenCategoryFromTokenType(tokenType);
+            img.BorderBrush = App.GetColor(LLKHelper.TokenCategoryThemes[tokenCategory]);
             switch (tokenCategory)
             {
                 case TokenCategory.None:
