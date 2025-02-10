@@ -66,11 +66,11 @@ namespace DianaLLK_GUI
             await Game.ActiveSkillAsync(e.SKill);
         }
 
-        private async void StartGame_Click(object sender, RoutedEventArgs e)
+        private void StartGame_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                await Game.StartGameAsync(GameSetter.RowSize, GameSetter.ColumnSize, GameSetter.TokenAmount);
+                Game.StartGame(GameSetter.RowSize, GameSetter.ColumnSize, GameSetter.TokenAmount);
                 GetGameTheme();
                 FoldGameSetterPanel();
                 FoldTokenStack();
@@ -158,25 +158,27 @@ namespace DianaLLK_GUI
                 {
                     tokenRound.Opacity = 0;
                 }
-                Canvas.SetLeft(tokenRound, token.Coordinate.Column * 120);
-                Canvas.SetTop(tokenRound, token.Coordinate.Row * 120);
+                Canvas.SetLeft(tokenRound, token.Coordinate.X * 120);
+                Canvas.SetTop(tokenRound, token.Coordinate.Y * 120);
                 TokensLayout.Children.Add(tokenRound);
             }
         }
 
         private async void Game_TokensLinked(object sender, TokensLinkedEventArgs e)
         {
-            Point[] tokenPositions = TokensLayout.Children.OfType<LLKTokenRound>()
-                .Where(x => x.Token == e.First || x.Token == e.Second)
-                .Select(x =>
-                {
-                    GeneralTransform transform = x.TransformToAncestor(TokensLayout);
-                    Point pos = transform.Transform(new Point(0, 0));
-                    pos.X += 60;
-                    pos.Y += 60;
-                    return pos;
-                })
-                .ToArray();
+            var tokenPositions = new Point[e.Nodes.Length];
+            for (int i = 0; i < e.Nodes.Length; i++)
+            {
+                Coordinate node = e.Nodes[i];
+                LLKToken token = Game[node];
+                LLKTokenRound tokenRound = TokensLayout.Children.OfType<LLKTokenRound>()
+                    .First(x => x.Token.Coordinate == node);
+                GeneralTransform transform = tokenRound.TransformToAncestor(TokensLayout);
+                Point pos = transform.Transform(new Point(0, 0));
+                pos.X += 60;
+                pos.Y += 60;
+                tokenPositions[i] = pos;
+            }
 
             if (tokenPositions.Length >= 2)
             {

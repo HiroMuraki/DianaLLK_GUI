@@ -13,6 +13,7 @@ namespace LianLianKan
             _skillLocker = new object();
         }
 
+
         public event EventHandler<SkillActivatedEventArgs> SkillActived;
 
         public int SkillPoint { get; private set; }
@@ -20,13 +21,6 @@ namespace LianLianKan
         public override void StartGame(int rowSize, int columnSize, int tokenAmount)
         {
             base.StartGame(rowSize, columnSize, tokenAmount);
-            SkillPoint = GetSkillPoint();
-            OnPropertyChanged(nameof(SkillPoint));
-        }
-
-        public override async Task StartGameAsync(int rowSize, int columnSize, int tokenAmount)
-        {
-            await base.StartGameAsync(rowSize, columnSize, tokenAmount);
             SkillPoint = GetSkillPoint();
             OnPropertyChanged(nameof(SkillPoint));
         }
@@ -92,13 +86,13 @@ namespace LianLianKan
         }
 
         #region NonPublic
-        protected override TokenSelectResult SelectTokenHelper(LLKToken token)
+        protected override TokenSelectResult SelectTokenHelper(LLKToken token, out Coordinate[] nodes)
         {
             LLKToken heldToken = _heldToken;
             LLKToken currentToken = token;
             LLKTokenType? heldTokenType = _heldToken?.TokenType;
             LLKTokenType? currentTokenType = token?.TokenType;
-            TokenSelectResult tokenSelectResult = base.SelectTokenHelper(token);
+            TokenSelectResult tokenSelectResult = base.SelectTokenHelper(token, out nodes);
             if (tokenSelectResult == TokenSelectResult.Reset)
             {
                 // 如果启用了贝拉Power
@@ -293,13 +287,13 @@ namespace LianLianKan
                         LLKTokenType.D5
                     };
             var strawberriesPos = new List<Coordinate>();
-            for (int row = 0; row < _rowSize; row++)
+            for (int y = 0; y < _rowSize; y++)
             {
-                for (int col = 0; col < _columnSize; col++)
+                for (int x = 0; x < _columnSize; x++)
                 {
-                    if (strarwberries.Contains(_gameLayout[row, col].TokenType))
+                    if (strarwberries.Contains(_gameLayout[y, x].TokenType))
                     {
-                        strawberriesPos.Add(new Coordinate(row, col));
+                        strawberriesPos.Add(new Coordinate(x, y));
                     }
                 }
             }
@@ -310,8 +304,8 @@ namespace LianLianKan
                 strawberriesPos.Remove(a);
                 Coordinate b = strawberriesPos[rnd.Next(0, strawberriesPos.Count)];
                 strawberriesPos.Remove(b);
-                _gameLayout[a.Row, a.Column].TokenType = current;
-                _gameLayout[b.Row, b.Column].TokenType = current;
+                _gameLayout[a.Y, a.X].TokenType = current;
+                _gameLayout[b.Y, b.X].TokenType = current;
             }
             SkillPoint -= 1;
             return true;

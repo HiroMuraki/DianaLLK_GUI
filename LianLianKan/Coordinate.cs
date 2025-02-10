@@ -1,28 +1,24 @@
-public struct Coordinate
+public readonly struct Coordinate
 {
-    public Coordinate(int row, int column)
+    public Coordinate(int x, int y)
     {
-        Row = row;
-        Column = column;
+        X = x;
+        Y = y;
     }
 
-    public static readonly Coordinate NullCoordinate = new(-1, -1);
+    public static Coordinate NullCoordinate = new(-1, -1);
 
-    public int Row { get; set; }
+    public int X { get; }
 
-    public int Column { get; set; }
+    public int Y { get; }
 
-    public readonly int X => Column;
+    public Coordinate Up => new(X, Y + 1);
 
-    public readonly int Y => Row;
+    public Coordinate Down => new(X, Y - 1);
 
-    public readonly Coordinate Up => new(Y + 1, X);
+    public Coordinate Left => new(X - 1, Y);
 
-    public readonly Coordinate Down => new(Y - 1, X);
-
-    public readonly Coordinate Left => new(Y, X - 1);
-
-    public readonly Coordinate Right => new(Y, X + 1);
+    public Coordinate Right => new(X + 1, Y);
 
     public static float SqrDistance(Coordinate a, Coordinate b)
     {
@@ -31,7 +27,7 @@ public struct Coordinate
 
     public static bool operator ==(Coordinate left, Coordinate right)
     {
-        return left.Row == right.Row && left.Column == right.Column;
+        return left.X == right.X && left.Y == right.Y;
     }
 
     public static bool operator !=(Coordinate left, Coordinate right)
@@ -39,18 +35,18 @@ public struct Coordinate
         return !(left == right);
     }
 
-    public readonly override bool Equals(object obj)
+    public override bool Equals(object obj)
     {
         return base.Equals(obj);
     }
 
-    public readonly override int GetHashCode()
+    public override int GetHashCode()
     {
         return base.GetHashCode();
     }
 
-    public readonly override string ToString()
+    public override string ToString()
     {
-        return $"[Row = {Row}, Column = {Column}]";
+        return $"[X = {X}, Y = {Y}]";
     }
 }
