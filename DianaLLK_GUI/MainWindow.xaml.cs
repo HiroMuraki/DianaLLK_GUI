@@ -443,7 +443,7 @@ namespace DianaLLK_GUI
         #endregion
     }
 
-    class LineDrawer
+    sealed class LineDrawer
     {
         public LineDrawer(Canvas canvas)
         {
@@ -462,15 +462,6 @@ namespace DianaLLK_GUI
             // 遍历点数组，依次连接相邻的点
             for (int i = 0; i < points.Length - 1; i++)
             {
-                //// 创建一个新的 Line 对象
-                //var line = new Line();
-                //// 设置线段的起点和终点
-                //line.X1 = points[i].X;
-                //line.Y1 = points[i].Y;
-                //line.X2 = points[i + 1].X;
-                //line.Y2 = points[i + 1].Y;
-                //// 设置线段的样式，这里设置为黑色，宽度为 2
-                //line.Stroke = Brushes.White;
                 Line line = DrawLine(points[i], points[i + 1]);
                 // 将线段添加到 Canvas 中
                 _canvas.Children.Add(line);
@@ -515,7 +506,7 @@ namespace DianaLLK_GUI
             double dashInterval = lineLength / 50 <= 3 ? lineLength / 50 : 3;
             line.StrokeDashArray = new DoubleCollection(new double[2] { dashLength, dashInterval });
             // 绘制线条颜色
-            line.Stroke = new SolidColorBrush(Colors.Gold);
+            line.Stroke = new SolidColorBrush(Colors.White);
             // 绘制线条位置
             line.X1 = startPos.X;
             line.Y1 = startPos.Y;
